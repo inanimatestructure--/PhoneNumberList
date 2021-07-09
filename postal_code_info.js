@@ -113,15 +113,15 @@ function callBack(url,asyncFlag){
 }
 
 function info(dir){
-    let j = 0;
     var request = "";
     var arr = [];
     let url = "";
-    let firstNum = 1;
-    let lastNum = 1;
-    while(firstNum >= process.argv[4] && firstNum <= process.argv[5]){
-        while(lastNum >= process.argv[6] && lastNum <= process.argv[7]){
-            while(j >= process.argv[8] && j <= process.argv[9]){
+    let firstNum = process.argv[4];
+    let lastNum = process.argv[6];
+    let j = process.argv[8];
+    while(firstNum <= process.argv[5]){
+        while(lastNum <= process.argv[7]){
+            while(j <= process.argv[9]){
                 url = "https://www.canada411.ca/search/si/"+dir+"/-/"+process.argv[2]+"+"+firstNum+""+alphabet[j]+""+lastNum+"/rci-Halifax?pgLen=25";
                 callBack(url, true);
                 j++;
