@@ -1,4 +1,6 @@
-# PhoneNumberList
+# Canadian Reverse Postal Code Phone Number Application
+
+## Search through the Canada411.com website url html to find the names, landline phone numbers and addresses and put them into the spreadsheet.
 
 # How to setup 
     npm install XMLHttpRequest
@@ -13,4 +15,9 @@
 
 ##### Example below:
     node postal_code_info.js B3H phone_list_1.csv 1 3 1 5 0 6
+   
+   
+# TO DO:
+
+## Adding multiple directory searches for postal codes with more than 25 results.
 
