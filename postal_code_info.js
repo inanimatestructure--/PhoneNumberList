@@ -119,9 +119,9 @@ function info(dir){
     let url = "";
     let firstNum = 1;
     let lastNum = 1;
-    while(firstNum < 7){
-        while(lastNum < 7){
-            while(j < 25){
+    while(firstNum >= process.argv[4] && firstNum <= process.argv[5]){
+        while(lastNum >= process.argv[6] && lastNum <= process.argv[7]){
+            while(j >= process.argv[8] && j <= process.argv[9]){
                 url = "https://www.canada411.ca/search/si/"+dir+"/-/"+process.argv[2]+"+"+firstNum+""+alphabet[j]+""+lastNum+"/rci-Halifax?pgLen=25";
                 callBack(url, true);
                 j++;
