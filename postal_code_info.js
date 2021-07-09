@@ -87,7 +87,7 @@ function asyncProc(req){
                     break;
                 }
             }
-            if(count >= 25){
+            if(pageCount >= 25){
                 flag = true;
             }
         }
@@ -112,7 +112,7 @@ function callBack(url,asyncFlag){
     req.send();
 }
 
-function info(){
+function info(dir){
     let j = 0;
     var request = "";
     var arr = [];
@@ -122,7 +122,7 @@ function info(){
     while(firstNum < 7){
         while(lastNum < 7){
             while(j < 25){
-                url = "https://www.canada411.ca/search/si/"+1+"/-/"+process.argv[2]+"+"+firstNum+""+alphabet[j]+""+lastNum+"/rci-Halifax?pgLen=25";
+                url = "https://www.canada411.ca/search/si/"+dir+"/-/"+process.argv[2]+"+"+firstNum+""+alphabet[j]+""+lastNum+"/rci-Halifax?pgLen=25";
                 callBack(url, true);
                 j++;
             }
@@ -135,4 +135,4 @@ function info(){
     firstNum=1;
 }
 
-info();
+info(1);
