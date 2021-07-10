@@ -24,7 +24,6 @@ function convertToCSV(){
            }
         }else{
            for(let key in postal_code[row]){
-               console.log(postal_code[row][key]);
                csv += postal_code[row][key] + (keysCounter+1 < keysAmount ? ',' : '\r\n' )
                keysCounter++
            }
@@ -95,6 +94,7 @@ function asyncProc(req,front,fNum,midAlpha,lNum){
             if(multipleResults.querySelectorAll("a[href='/search/si/2/-/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25']")){
                 multiPageCount++;
                 console.log(multiPageCount++);
+                // loop through more pages; doesn't quite work yet
                 // while(multipleResults.querySelectorAll("a[href='/search/si/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25']")){
                 //     let url = "https://www.canada411.ca/search/si/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25";
                 //     callBack(url,true,front,fNum,midAlpha,lNum,multipleResults);
