@@ -14,10 +14,12 @@
 #### The alphabet, or the middle value, is from 0-25
 
 ##### Example below:
-    node postal_code_info.js B3H phone_list_1.csv 1 3 1 5 0 6
+    node postal_code_info.js B3H phone_list_B3H_1.csv 1 3 1 5 0 6
+
+#### The reason I did it this way is because the searching is extremely long and will probably crash if you try to search everything all at once. This makes it slower but more efficient. 
    
    
 # TO DO:
 
-## Adding multiple directory searches for postal codes with more than 25 results.
+## Adding multiple directory searches for postal codes with more than 25 results per page so we can move to the next page.
 
