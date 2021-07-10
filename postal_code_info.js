@@ -47,7 +47,23 @@ function convertToCSV(){
 
 }
 
-function asyncProc(req){
+function multiPageSearch(multipleResults){
+    let count = 1;
+    while(true){
+        if(multipleResults.querySelector('div#Contact'+count+'')){
+            name = multipleResults.querySelector('div#Contact'+count+' .c411ListedName').textContent;
+            address = multipleResults.querySelector('div#Contact'+count+' #ContactAddress'+count+'').textContent;
+            number = multipleResults.querySelector('div#Contact'+count+' #ContactPhone'+count+'').textContent;
+            postal_code.push({"phone_number" : number, "full_name": name, "address": address });
+            count++;
+        }
+        else{
+            break;
+        }
+    }
+}
+
+function asyncProc(req,front,fNum,midAlpha,lNum){
     var doc = new JSDOM(req.responseText).window.document;
     let pageHTML = doc.createElement('html');
     pageHTML.innerHTML = req.responseText;
@@ -74,41 +90,40 @@ function asyncProc(req){
         }
         else if(multipleResults){
             console.log('multiple result page');
-            let count = 1;
-            while(true){
-                if(multipleResults.querySelector('div#Contact'+count+'')){
-                    name = multipleResults.querySelector('div#Contact'+count+' .c411ListedName').textContent;
-                    address = multipleResults.querySelector('div#Contact'+count+' #ContactAddress'+count+'').textContent;
-                    number = multipleResults.querySelector('div#Contact'+count+' #ContactPhone'+count+'').textContent;
-                    postal_code.push({"phone_number" : number, "full_name": name, "address": address });
-                    count++;
-                }
-                else{
-                    break;
-                }
-            }
-            if(pageCount >= 25){
-                flag = true;
+            let multiPageCount = 1;
+            multiPageSearch(multipleResults);
+            if(multipleResults.querySelectorAll("a[href='/search/si/2/-/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25']")){
+                multiPageCount++;
+                console.log(multiPageCount++);
+                // while(multipleResults.querySelectorAll("a[href='/search/si/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25']")){
+                //     let url = "https://www.canada411.ca/search/si/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25";
+                //     callBack(url,true,front,fNum,midAlpha,lNum,multipleResults);
+                //     multiPageCount++;
+                // }
             }
         }
     }   
 }
 
-function callBack(url,asyncFlag){
+function callBack(url,firstDirectory,front,fNum,midAlpha,lNum,multiResults){
     var req = new XMLHttpRequest();
-    if(asyncFlag){
+    if(!firstDirectory){
         req.onreadystatechange = function() {
             if(this.readyState == 4) {
-                asyncProc(this);
+                asyncProc(this,front,fNum,midAlpha,lNum);
                 conf = convertToCSV();
             }
-            
         }
     }
     else{
-        req.timeout = 4000;
+        req.onreadystatechange = function() {
+            if(this.readyState == 4){
+                multiPageSearch(multiResults);
+                conf = convertToCSV();
+            }
+        }
     }
-    req.open("GET",url, !(!asyncFlag));
+    req.open("GET",url, !(!firstDirectory));
     req.send();
 }
 
@@ -123,7 +138,7 @@ function info(dir){
         while(lastNum <= process.argv[7]){
             while(j <= process.argv[9]){
                 url = "https://www.canada411.ca/search/si/"+dir+"/-/"+process.argv[2]+"+"+firstNum+""+alphabet[j]+""+lastNum+"/rci-Halifax?pgLen=25";
-                callBack(url, true);
+                callBack(url, false, process.argv[2], firstNum, alphabet[j],lastNum, null);
                 j++;
             }
             j=0;
