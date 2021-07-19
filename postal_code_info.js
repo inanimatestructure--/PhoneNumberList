@@ -117,7 +117,7 @@ function callBack(url,firstDirectory,front,fNum,midAlpha,lNum,multiResults){
     else{
         req.onreadystatechange = function() {
             if(this.readyState == 4){
-                multiPageSearch(multiResults);
+                multiPageSearch(multiResults,"1");
                 conf = convertToCSV();
             }
         }
