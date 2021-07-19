@@ -36,7 +36,8 @@ function convertToCSV(){
         header: [
             {id: 'phone_number', title: 'Phone'},
             {id: 'full_name', title: 'Name'},
-            {id: 'address', title: 'Address'}
+            {id: 'address', title: 'Address'},
+            {id: 'multiple_dir', title: 'Directory #'}
         ]
     });
 
@@ -46,14 +47,14 @@ function convertToCSV(){
 
 }
 
-function multiPageSearch(multipleResults){
+function multiPageSearch(multipleResults,multiCount){
     let count = 1;
     while(true){
         if(multipleResults.querySelector('div#Contact'+count+'')){
             name = multipleResults.querySelector('div#Contact'+count+' .c411ListedName').textContent;
             address = multipleResults.querySelector('div#Contact'+count+' #ContactAddress'+count+'').textContent;
             number = multipleResults.querySelector('div#Contact'+count+' #ContactPhone'+count+'').textContent;
-            postal_code.push({"phone_number" : number, "full_name": name, "address": address });
+            postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir" : multiCount});
             count++;
         }
         else{
@@ -85,21 +86,19 @@ function asyncProc(req,front,fNum,midAlpha,lNum){
             number = singleResult.querySelector('span.vcard__label').textContent;
             name = singleResult.querySelector('h1.vcard__name').textContent;
             address = singleResult.querySelector('div.c411Address.vcard__address').textContent;
-            postal_code.push({"phone_number" : number, "full_name": name, "address": address });
+            postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir": "1" });
         }
         else if(multipleResults){
             console.log('multiple result page');
             let multiPageCount = 1;
-            multiPageSearch(multipleResults);
+           
             if(multipleResults.querySelectorAll("a[href='/search/si/2/-/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25']")){
                 multiPageCount++;
                 console.log(multiPageCount++);
-                // loop through more pages; doesn't quite work yet
-                // while(multipleResults.querySelectorAll("a[href='/search/si/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25']")){
-                //     let url = "https://www.canada411.ca/search/si/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25";
-                //     callBack(url,true,front,fNum,midAlpha,lNum,multipleResults);
-                //     multiPageCount++;
-                // }
+                multiPageSearch(multipleResults, multiPageCount.toString());
+            }
+            else{
+                multiPageSearch(mutlipleResults,"1");
             }
         }
     }   
@@ -128,8 +127,6 @@ function callBack(url,firstDirectory,front,fNum,midAlpha,lNum,multiResults){
 }
 
 function info(dir){
-    var request = "";
-    var arr = [];
     let url = "";
     let firstNum = process.argv[4];
     let lastNum = process.argv[6];
