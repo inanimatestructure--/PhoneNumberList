@@ -6,20 +6,16 @@
     npm install XMLHttpRequest
     npm install csv-writer
     npm install jsdom
+    npm install fs
+    npm install papa
 
 # Example command to run the phone number list script
 
-#### The command line arguments are the first 3 values in a postal code so for Nova Scotia it would be B3H but for other provinces it's different and then followed by the name of the csv you want to save it to.
-#### The last 6 arguments are the boundaries for what kind of postal code range you want to cover, ie. the first number in the second half of the postal code would be in the range of 1-9 in this example and same with the last.
-#### The alphabet, or the middle value, is from 0-25
-
-##### Example below:
-    node postal_code_info.js B3H phone_list_B3H_1.csv 1 3 1 5 0 6
-
-#### The reason I did it this way is because the searching is extremely long and will probably crash if you try to search everything all at once. This makes it slower but more efficient. 
-   
-   
-# TO DO:
-
-## Adding multiple directory searches for postal codes with more than 25 results per page so we can move to the next page.
+# In Windows, all you need to do is change the directory to the project folder so,
+    cd PhoneNumberlist
+    
+# And run the below commands in Powershell. I'll make a bash file for linux and mac eventually.
+    ./run.bat
+    
+# Then just sit back and wait a bit, it takes a while.
 
