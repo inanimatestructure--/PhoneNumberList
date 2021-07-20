@@ -5,7 +5,6 @@ const { JSDOM } = jsdom;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 let postal_code = [];
-let flag = false;
 let conf = "";
 let csvUrl = process.argv[3];
 
@@ -37,7 +36,8 @@ function convertToCSV(){
             {id: 'phone_number', title: 'Phone'},
             {id: 'full_name', title: 'Name'},
             {id: 'address', title: 'Address'},
-            {id: 'multiple_dir', title: 'Directory #'}
+            {id: 'multiple_dir', title: 'Directory'},
+            {id: 'url', title: 'URL'}
         ]
     });
 
@@ -47,14 +47,14 @@ function convertToCSV(){
 
 }
 
-function multiPageSearch(multipleResults,multiCount){
+function multiPageSearch(multipleResults,multiCount,url){
     let count = 1;
     while(true){
         if(multipleResults.querySelector('div#Contact'+count+'')){
-            name = multipleResults.querySelector('div#Contact'+count+' .c411ListedName').textContent;
-            address = multipleResults.querySelector('div#Contact'+count+' #ContactAddress'+count+'').textContent;
-            number = multipleResults.querySelector('div#Contact'+count+' #ContactPhone'+count+'').textContent;
-            postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir" : multiCount});
+            name = multipleResults.querySelector('div#Contact'+count+' .c411ListedName').textContent.toString();
+            address = multipleResults.querySelector('div#Contact'+count+' #ContactAddress'+count+'').textContent.toString();
+            number = multipleResults.querySelector('div#Contact'+count+' #ContactPhone'+count+'').textContent.toString();
+            postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir": multiCount, "url": url});
             count++;
         }
         else{
@@ -63,42 +63,35 @@ function multiPageSearch(multipleResults,multiCount){
     }
 }
 
-function asyncProc(req,front,fNum,midAlpha,lNum){
+function asyncProc(req,front,fNum,midAlpha,lNum,url){
     var doc = new JSDOM(req.responseText).window.document;
     let pageHTML = doc.createElement('html');
     pageHTML.innerHTML = req.responseText;
-
     let singleResult = pageHTML.querySelector('div#contact.vcard');
     let multipleResults = pageHTML.querySelector('div.c411ResultList');
+    let multiPaging = pageHTML.querySelector('.c411Paging');
     let number, name, address;
     if(pageHTML.querySelector('div.ypalert.ypalert--warning')){
         console.log("No Results");
-        flag = false;
     }
     else if(pageHTML.querySelector('div.ypalert.ypalert--error')){
         console.log("No Results");
-        flag = false;
     }
     else{
         if(singleResult){
-            flag = false;
             console.log('single result page');
-            number = singleResult.querySelector('span.vcard__label').textContent;
-            name = singleResult.querySelector('h1.vcard__name').textContent;
-            address = singleResult.querySelector('div.c411Address.vcard__address').textContent;
-            postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir": "1" });
+            number = singleResult.querySelector('span.vcard__label').textContent.toString();
+            name = singleResult.querySelector('h1.vcard__name').textContent.toString();
+            address = singleResult.querySelector('div.c411Address.vcard__address').textContent.toString();
+            postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir": "1", "url": ""});
         }
         else if(multipleResults){
             console.log('multiple result page');
-            let multiPageCount = 1;
-           
-            if(multipleResults.querySelectorAll("a[href='/search/si/2/-/"+multiPageCount+"/-/"+front+"+"+fNum+""+midAlpha+""+lNum+"/rci-Halifax?pgLen=25']")){
-                multiPageCount++;
-                console.log(multiPageCount++);
-                multiPageSearch(multipleResults, multiPageCount.toString());
+            if(multiPaging.querySelector('a:not(.active)')){
+                multiPageSearch(multipleResults,"2",url.replace('/1/','/2/'));
             }
             else{
-                multiPageSearch(mutlipleResults,"1");
+                multiPageSearch(multipleResults,"1","");
             }
         }
     }   
@@ -109,7 +102,7 @@ function callBack(url,firstDirectory,front,fNum,midAlpha,lNum,multiResults){
     if(!firstDirectory){
         req.onreadystatechange = function() {
             if(this.readyState == 4) {
-                asyncProc(this,front,fNum,midAlpha,lNum);
+                asyncProc(this,front,fNum,midAlpha,lNum,url);
                 conf = convertToCSV();
             }
         }
@@ -117,7 +110,7 @@ function callBack(url,firstDirectory,front,fNum,midAlpha,lNum,multiResults){
     else{
         req.onreadystatechange = function() {
             if(this.readyState == 4){
-                multiPageSearch(multiResults,"1");
+                multiPageSearch(multiResults,"1",url);
                 conf = convertToCSV();
             }
         }
