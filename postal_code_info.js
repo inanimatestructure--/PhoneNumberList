@@ -140,5 +140,3 @@ const info = (dir) => {
 }
 
 info(1);
-
-exports.convertToCSV = convertToCSV;
