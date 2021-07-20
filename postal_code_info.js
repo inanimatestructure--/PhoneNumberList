@@ -8,8 +8,7 @@ let postal_code = [];
 let conf = "";
 let csvUrl = process.argv[3];
 
-
-function convertToCSV(){
+const convertToCSV = () => {
     let csv ="";
 
     for(let row = 0; row < postal_code.length; row++){
@@ -37,7 +36,7 @@ function convertToCSV(){
             {id: 'full_name', title: 'Name'},
             {id: 'address', title: 'Address'},
             {id: 'multiple_dir', title: 'Directory'},
-            {id: 'url', title: 'URL'}
+            {id: 'url', title: 'Url'}
         ]
     });
 
@@ -47,7 +46,7 @@ function convertToCSV(){
 
 }
 
-function multiPageSearch(multipleResults,multiCount,url){
+const multiPageSearch = (multipleResults,multiCount,url) => {
     let count = 1;
     while(true){
         if(multipleResults.querySelector('div#Contact'+count+'')){
@@ -63,7 +62,7 @@ function multiPageSearch(multipleResults,multiCount,url){
     }
 }
 
-function asyncProc(req,front,fNum,midAlpha,lNum,url){
+const asyncProc = (req,front,fNum,midAlpha,lNum,url) => {
     var doc = new JSDOM(req.responseText).window.document;
     let pageHTML = doc.createElement('html');
     pageHTML.innerHTML = req.responseText;
@@ -97,7 +96,7 @@ function asyncProc(req,front,fNum,midAlpha,lNum,url){
     }   
 }
 
-function callBack(url,firstDirectory,front,fNum,midAlpha,lNum,multiResults){
+const callBack = (url,firstDirectory,front,fNum,midAlpha,lNum,multiResults) => {
     var req = new XMLHttpRequest();
     if(!firstDirectory){
         req.onreadystatechange = function() {
@@ -119,7 +118,7 @@ function callBack(url,firstDirectory,front,fNum,midAlpha,lNum,multiResults){
     req.send();
 }
 
-function info(dir){
+const info = (dir) => {
     let url = "";
     let firstNum = process.argv[4];
     let lastNum = process.argv[6];
@@ -141,3 +140,5 @@ function info(dir){
 }
 
 info(1);
+
+exports.convertToCSV = convertToCSV;
