@@ -14,8 +14,9 @@ goto loop
 :close
 Get-Content *.csv| Add-Content gp_final.csv
 Dir *.csv -Exclude gp_final.csv -R | del
-Import-Csv gp_final.csv | sort Phone,Name –Unique
-ECHO All searching is complete
+Import-Csv gp_final.csv | sort Phone –Unique | Export-CSV -Path gp_phone_list.csv -NoTypeInformation
+Dir *.csv -Exclude gp_phone_list.csv -R | del
+ECHO All searching is complete...
 pause
 exit
 
