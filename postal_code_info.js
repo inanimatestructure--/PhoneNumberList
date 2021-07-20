@@ -2,11 +2,13 @@ const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+const lineReader = require('line-reader');
 let postal_code = [];
+
+
 let conf = "";
-let csvUrl = process.argv[3];
+let csvUrl = process.argv[2];
 
 const convertToCSV = () => {
     let csv ="";
@@ -62,7 +64,7 @@ const multiPageSearch = (multipleResults,multiCount,url) => {
     }
 }
 
-const asyncProc = (req,front,fNum,midAlpha,lNum,url) => {
+const asyncProc = (req,url) => {
     var doc = new JSDOM(req.responseText).window.document;
     let pageHTML = doc.createElement('html');
     pageHTML.innerHTML = req.responseText;
@@ -70,73 +72,42 @@ const asyncProc = (req,front,fNum,midAlpha,lNum,url) => {
     let multipleResults = pageHTML.querySelector('div.c411ResultList');
     let multiPaging = pageHTML.querySelector('.c411Paging');
     let number, name, address;
-    if(pageHTML.querySelector('div.ypalert.ypalert--warning')){
-        console.log("No Results");
+    if(singleResult){
+        console.log('single result page');
+        number = singleResult.querySelector('span.vcard__label').textContent.toString();
+        name = singleResult.querySelector('h1.vcard__name').textContent.toString();
+        address = singleResult.querySelector('div.c411Address.vcard__address').textContent.toString();
+        postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir": "1", "url": ""});
     }
-    else if(pageHTML.querySelector('div.ypalert.ypalert--error')){
-        console.log("No Results");
+    else if(multipleResults){
+        console.log('multiple result page');
+        if(multiPaging.querySelector('a:not(.active)')){
+            multiPageSearch(multipleResults,"2",url.replace('/1/','/2/'));
+        }
+        else{
+            multiPageSearch(multipleResults,"1","");
+        }
     }
-    else{
-        if(singleResult){
-            console.log('single result page');
-            number = singleResult.querySelector('span.vcard__label').textContent.toString();
-            name = singleResult.querySelector('h1.vcard__name').textContent.toString();
-            address = singleResult.querySelector('div.c411Address.vcard__address').textContent.toString();
-            postal_code.push({"phone_number" : number, "full_name": name, "address": address, "multiple_dir": "1", "url": ""});
-        }
-        else if(multipleResults){
-            console.log('multiple result page');
-            if(multiPaging.querySelector('a:not(.active)')){
-                multiPageSearch(multipleResults,"2",url.replace('/1/','/2/'));
-            }
-            else{
-                multiPageSearch(multipleResults,"1","");
-            }
-        }
-    }   
 }
 
-const callBack = (url,firstDirectory,front,fNum,midAlpha,lNum,multiResults) => {
+const callBack = (url,firstDirectory) => {
     var req = new XMLHttpRequest();
-    if(!firstDirectory){
-        req.onreadystatechange = function() {
-            if(this.readyState == 4) {
-                asyncProc(this,front,fNum,midAlpha,lNum,url);
-                conf = convertToCSV();
-            }
+    req.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            asyncProc(this,url);
+            conf = convertToCSV();
         }
     }
-    else{
-        req.onreadystatechange = function() {
-            if(this.readyState == 4){
-                multiPageSearch(multiResults,"1",url);
-                conf = convertToCSV();
-            }
-        }
-    }
-    req.open("GET",url, !(!firstDirectory));
+    req.open("GET",url);
     req.send();
 }
 
 const info = (dir) => {
-    let url = "";
-    let firstNum = process.argv[4];
-    let lastNum = process.argv[6];
-    let j = process.argv[8];
-    while(firstNum <= process.argv[5]){
-        while(lastNum <= process.argv[7]){
-            while(j <= process.argv[9]){
-                url = "https://www.canada411.ca/search/si/"+dir+"/-/"+process.argv[2]+"+"+firstNum+""+alphabet[j]+""+lastNum+"/rci-Halifax?pgLen=25";
-                callBack(url, false, process.argv[2], firstNum, alphabet[j],lastNum, null);
-                j++;
-            }
-            j=0;
-            lastNum++;
-        }
-        lastNum=1;
-        firstNum++;
-    }
-    firstNum=1;
+    lineReader.eachLine('./postalCodeList.txt', function(line) {
+        url = "https://www.canada411.ca/search/si/1/-/"+line+"/rci-Halifax?pgLen=25";
+        callBack(url, false);
+    });
+        
 }
 
 info(1);

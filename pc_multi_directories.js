@@ -11,6 +11,7 @@ function searchMulti(){
     for(let key in csvData){
         if(csvData[key].Directory == "2"){
             if(arr.find(element => element == csvData[key].Url)){
+                //ignore
             }
             else{
                 arr.push(csvData[key].Url);
