@@ -3,7 +3,7 @@ ECHO ============================
 ECHO RUN EXTRA DIRECTORY SEARCH ON POSTAL CODES
 ECHO ============================
 ECHO This may take a while .... 
-node postal_code_info.js gp_phone.csv
+node --max-old-space-size=7168 postal_code_info.js gp_phone.csv
 timeout /t 10
 ECHO Search all directories. This may take A LOT longer...
 set num=2
