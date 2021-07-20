@@ -8,7 +8,7 @@ timeout /t 10
 ECHO Search all directories. This may take A LOT longer...
 set num=2
 :loop
-node pc_multi_directories.js gp_phone.csv gp_phone_%num%.csv
+node pc_multi_directories.js gp_phone.csv gp_phone_%num%.csv %num%
 set /a num = %num% + 1
 if %num% == 150 goto close
 goto loop
