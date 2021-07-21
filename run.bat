@@ -13,7 +13,7 @@ set /a num = %num% + 1
 if %num% == 3 goto close
 goto loop
 :close
-powershell -Command "Get-Content *.csv | Add-Content C:\phone_temp\gp_final.csv"
+powershell -Command "Get-Content C:\phone_temp\*.csv | Add-Content C:\phone_temp\gp_final.csv"
 powershell -Command "Dir C:\phone_temp\*.csv -Exclude C:\phone_temp\gp_final.csv -R | del"
 powershell -Command "Import-Csv C:\phone_temp\gp_final.csv | sort Name -Unique | Export-CSV -Path C:\phone_temp\gp_phone_list.csv -NoTypeInformation"
 powershell -Command "Dir C:\phone_temp\*.csv -Exclude C:\phone_temp\gp_phone_list.csv -R | del"
