@@ -24,4 +24,6 @@
     
 ## Then just sit back and wait a bit, it takes a while. You'll end up with a file called gp_phone_list.csv in C:\phone_temp\real folder.
 
-
+## If you would like to change how many times the batch file loops through the directories change the 
+    %num% == value 
+on line 14 of run.bat
