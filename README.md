@@ -22,6 +22,6 @@
 # And run the below commands in Powershell. I'll make a bash file for linux and mac eventually.
     ./run.bat
     
-# Then just sit back and wait a bit, it takes a while.
+# Then just sit back and wait a bit, it takes a while. You'll end up with a file called gp_phone_list.csv in the same folder.
 
 
