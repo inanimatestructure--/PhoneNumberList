@@ -16,7 +16,7 @@
     https://postal-codes.cybo.com/canada
     
 
-# After Windows, all you need to do is change the directory to the project folder so,
+# On Windows, all you need to do is change the directory to the project folder so,
     cd PhoneNumberlist
     
 # And run the below commands in Powershell. I'll make a bash file for linux and mac eventually.
