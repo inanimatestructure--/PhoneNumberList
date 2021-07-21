@@ -11,7 +11,7 @@ set num=2
 :loop
 node pc_multi_directories.js C:\phone_temp\gp_phone.csv C:\phone_temp\gp_phone_%num%.csv %num%
 set /a num = %num% + 1
-if %num% == 3 goto close
+if %num% == 63 goto close
 goto loop
 :close
 powershell -Command "Get-Content C:\phone_temp\*.csv | Add-Content C:\phone_temp\gp_final.csv"
