@@ -14,9 +14,7 @@ goto loop
 :close
 powershell -Command "Get-Content *.csv | Add-Content gp_final.csv"
 Dir *.csv -Exclude gp_final.csv -R | del
-powershell -Command "Import-Csv gp_final.csv 
-sort Phone –Unique 
-powershell -Command "Export-CSV -Path gp_phone_list.csv -NoTypeInformation"
+powershell -Command "Import-Csv gp_final.csv | sort Phone –Unique | Export-CSV -Path gp_phone_list.csv -NoTypeInformation"
 Dir *.csv -Exclude gp_phone_list.csv -R | del
 :: Example if you wanted to get rid of postal codes that were not part of your search
 :: Get-Content gp_phone_list.csv | Where{$_ -notmatch "B3K"} | Out-File gp2.csv
