@@ -9,7 +9,7 @@
     npm install fs
     npm install papa
 
-## You will need to create a text file with the list of Canadian Postal Codes you want IN THIS FORMAT. 
+## You will need to create a text file called postalCodeList.txt with the list of Canadian Postal Codes you want IN THIS FORMAT. 
     A1A+0A0
     
 ## I recommend this site as an example and looking under the postal code extensions: 
