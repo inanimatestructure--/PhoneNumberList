@@ -15,7 +15,7 @@
     A1A+0A0
     
 ## I recommend this site as an example and looking under the postal code extensions: 
-    https://postal-codes.cybo.com/canada
+    https://postal-codes.cybo.com/canada/V3N_burnaby/
     
 
 ## On Windows, all you need to do is change the directory to the project folder so,
