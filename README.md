@@ -2,7 +2,9 @@
 
 ## Scrape through the Canada411.com website url html to find the names, landline phone numbers and addresses and put them into the spreadsheet.
 
-# How to setup, install nodejs, and then install these node packages
+# How to setup
+
+## Install nodejs, and then install these node packages
     npm install XMLHttpRequest
     npm install csv-writer
     npm install jsdom
