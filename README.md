@@ -19,7 +19,7 @@
     
 
 ## On Windows, all you need to do is change the directory to the project folder so,
-    cd PhoneNumberlist
+    cd PhoneNumberList
     
 ## And run the below commands in Powershell. I'll make a bash file for linux and mac eventually.
     ./run.bat
