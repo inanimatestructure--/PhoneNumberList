@@ -29,3 +29,7 @@
 ## If you would like to change how many times the batch file loops through the directories change the 
     %num% == value 
 on line 14 of run.bat
+
+#### PS: This is not a very efficient program as it uses A LOT of memory to get every phone number associated with a postal code depending on the amount of postal codes you end up using. There is no API currently for the canada411 page so this is the best I could do.
+
+
